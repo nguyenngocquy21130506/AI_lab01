@@ -65,17 +65,17 @@ public class Environment {
 
 	public void step(int n) {
 		for (int i = 0; i < n; i++) {
-			step();
-			System.out.println("-------------------------");
+			stepUntilDone();
 		}
+		System.out.println("-----------DONE----------");
 	}
 
 	public void stepUntilDone() {
 		int i = 0;
-
 		while (!isDone) {
 			System.out.println("step: " + i++);
 			step();
+			System.out.println("-------------------------");
 		}
 	}
 }

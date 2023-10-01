@@ -20,6 +20,7 @@ public class Environment {
 	private EnvironmentState envState;
 	private boolean isDone = false;// all squares are CLEAN
 	private Agent agent = null;
+	private int score = 0;
 
 	public Environment(LocationState locAState, LocationState locBState, LocationState locCState,
 			LocationState locDState) {
@@ -41,14 +42,55 @@ public class Environment {
 		String agentlocation = envState.getAgentLocation();
 		if (action == SUCK_DIRT) {
 			envState.setLocationState(agentlocation, LocationState.CLEAN);
+			score += 500;
 		} else if (action == MOVE_LEFT) {
-			envState.setAgentLocation(LOCATION_D);
+			if (envState.getAgentLocation() == LOCATION_B) {
+				envState.setAgentLocation(LOCATION_A);
+				score -= 10;
+			} else {
+				if (envState.getAgentLocation() == LOCATION_C) {
+					envState.setAgentLocation(LOCATION_D);
+					score -= 10;
+				} else {
+					score -= 100;
+				}
+			}
 		} else if (action == MOVE_UP) {
-			envState.setAgentLocation(LOCATION_A);
+			if (envState.getAgentLocation() == LOCATION_C) {
+				envState.setAgentLocation(LOCATION_B);
+				score -= 10;
+			} else {
+				if (envState.getAgentLocation() == LOCATION_D) {
+					envState.setAgentLocation(LOCATION_A);
+					score -= 10;
+				} else {
+					score -= 100;
+				}
+			}
 		} else if (action == MOVE_RIGHT) {
-			envState.setAgentLocation(LOCATION_B);
+			if (envState.getAgentLocation() == LOCATION_A) {
+				envState.setAgentLocation(LOCATION_B);
+				score -= 10;
+			} else {
+				if (envState.getAgentLocation() == LOCATION_D) {
+					envState.setAgentLocation(LOCATION_C);
+					score -= 10;
+				} else {
+					score -= 100;
+				}
+			}
 		} else if (action == MOVE_DOWN) {
-			envState.setAgentLocation(LOCATION_C);
+			if (envState.getAgentLocation() == LOCATION_A) {
+				envState.setAgentLocation(LOCATION_D);
+				score -= 10;
+			} else {
+				if (envState.getAgentLocation() == LOCATION_B) {
+					envState.setAgentLocation(LOCATION_C);
+					score -= 10;
+				} else {
+					score -= 100;
+				}
+			}
 		}
 		return envState;
 	}
@@ -58,6 +100,10 @@ public class Environment {
 	public Percept getPerceptSeenBy() {
 		Percept per = new Percept(envState.getAgentLocation(), envState.getLocationState(envState.getAgentLocation()));
 		return per;
+	}
+
+	public int score() {
+		return score;
 	}
 
 	public void step() {
@@ -71,27 +117,25 @@ public class Environment {
 		if ((es.getLocationState(LOCATION_A) == LocationState.CLEAN)
 				&& (es.getLocationState(LOCATION_B) == LocationState.CLEAN)
 				&& (es.getLocationState(LOCATION_C) == LocationState.CLEAN)
-				&& (es.getLocationState(LOCATION_B) == LocationState.CLEAN))
+				&& (es.getLocationState(LOCATION_D) == LocationState.CLEAN))
 			isDone = true;// if both squares are clean, then agent do not need to do any action
 		es.display();
-		if(isDone) {
-			System.out.println("All squares are clean !");
-		}
 	}
 
 	public void step(int n) {
 		for (int i = 0; i < n; i++) {
-			step();
-			System.out.println("-------------------------");
+			stepUntilDone();
 		}
+		System.out.println("-----------DONE----------");
 	}
 
 	public void stepUntilDone() {
 		int i = 0;
-
 		while (!isDone) {
 			System.out.println("step: " + i++);
 			step();
+			System.out.println("Current score : " + score());
+			System.out.println("-------------------------");
 		}
 	}
 }
