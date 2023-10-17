@@ -8,9 +8,9 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
 
-public class DepthLimitSearch{
-	
-	//DFS
+public class DepthLimitSearch {
+
+	// DFS
 	public Node execute(Node root, String goal, int limit) {
 		Stack<Node> frontier = new Stack<>();
 		frontier.add(root);
@@ -19,16 +19,15 @@ public class DepthLimitSearch{
 			Node current = frontier.pop();
 			if (current.getLabel().equals(goal)) {
 				return current;
-			}
-			if(current.getDepth() < limit) {
-				
-			}else {
-				List<Node> Nodechldren = current.getChildrenNodes();
+			} else {
 				explored.add(current);
-				for (Node child : Nodechldren) {
-					if (!frontier.contains(child) && !explored.contains(child)) {
-						frontier.add(child);
-						child.setParent(current);
+				if (current.getDepth() < limit) {
+					List<Node> Nodechldren = current.getChildrenNodes();
+					for (Node child : Nodechldren) {
+						if (!frontier.contains(child) && !explored.contains(child)) {
+							frontier.add(child);
+							child.setParent(current);
+						}
 					}
 				}
 			}
@@ -48,7 +47,6 @@ public class DepthLimitSearch{
 				frontier.clear();
 				explored.clear();
 				current.setParent(null);
-//				return execute(current, goal);
 			}
 			if (current.getLabel().equals(goal) && started) {
 				return current;
