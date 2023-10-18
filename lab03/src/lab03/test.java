@@ -28,6 +28,6 @@ public class test {
 		UniformCostSearchAlgo a = new UniformCostSearchAlgo();
 		System.out.println(NodeUtils.printPath(a.execute(nodeS, "G")));
 		DepthLimitSearch depthLimitSearch = new DepthLimitSearch();
-		System.out.println(NodeUtils.printPath(depthLimitSearch.execute(nodeS, "H", 1)));
+		System.out.println(NodeUtils.printPath(depthLimitSearch.execute(nodeS, "G", 1)));
 	}
 }

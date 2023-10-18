@@ -22,11 +22,14 @@ public class DepthLimitSearch {
 			} else {
 				explored.add(current);
 				if (current.getDepth() < limit) {
-					List<Node> Nodechldren = current.getChildrenNodes();
-					for (Node child : Nodechldren) {
-						if (!frontier.contains(child) && !explored.contains(child)) {
-							frontier.add(child);
-							child.setParent(current);
+					List<Edge> Nodechldren = current.getChildren();
+					for (int i = Nodechldren.size() - 1; i >= 0; i--) {
+						Node end = Nodechldren.get(i).getEnd();
+						double newPathcost = current.getPathCost() + Nodechldren.get(i).getWeight();
+						if (!frontier.contains(Nodechldren.get(i)) && !explored.contains(Nodechldren.get(i))) {
+							frontier.add(end);
+							end.setParent(current);
+							end.setPathCost(newPathcost);
 						}
 					}
 				}
@@ -51,12 +54,15 @@ public class DepthLimitSearch {
 			if (current.getLabel().equals(goal) && started) {
 				return current;
 			} else {
-				List<Node> Nodechldren = current.getChildrenNodes();
+				List<Edge> Nodechldren = current.getChildren();
 				explored.add(current);
-				for (Node child : Nodechldren) {
+				for (Edge child : Nodechldren) {
+					Node end = child.getEnd();
+					double newPathcost = current.getPathCost() + child.getWeight();
 					if (!frontier.contains(child) && !explored.contains(child)) {
-						frontier.add(child);
-						child.setParent(current);
+						frontier.add(end);
+						end.setParent(current);
+						end.setPathCost(newPathcost);
 					}
 				}
 			}
